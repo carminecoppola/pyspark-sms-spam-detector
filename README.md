@@ -20,11 +20,19 @@ This project implements a fast and scalable SMS spam detection system using PySp
 scp -r /Users/pyspark-sms-spam-detector.zip $linkCluster:/home/sshuser/
 ```
 ### On the Cluster
+The user must set the following environment variables before running the script
+
+```bash
+export PROJECT_ROOT=/home/sshuser
+export ARCHIVE_NAME=iot-project-backup.zip
+```
+
+After this it's possible to compile the script
+
 ```bash
 chmod +x setup.sh
 ./setup.sh
 ```
-
 This will:
 
 - Decompress the archive
