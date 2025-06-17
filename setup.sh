@@ -20,18 +20,20 @@ function show_loading {
     echo -ne "\r[INFO] NLP script completed.           \n"
 }
 
+# --- STEP 0: Controllo variabili ambiente
+if [ -z "$PROJECT_ROOT" ] || [ -z "$ARCHIVE_NAME" ]; then
+    error_exit "You must set PROJECT_ROOT and ARCHIVE_NAME before running the script."
+fi
+
+cd "$PROJECT_ROOT" || error_exit "Cannot access directory: $PROJECT_ROOT"
+
 # --- STEP 1: Setup solo al primo lancio
 if [ ! -f ".setup_done" ]; then
-    # Decompressione
-    if [ -f "iot-project-backup.zip" ]; then
-        echo "[INFO] Decompressing project archive (ZIP)..."
-        unzip -q iot-project-backup.zip -d iot-project-backup-tmp || error_exit "Failed to decompress ZIP archive."
-    elif [ -f "iot-project-backup.tar.gz" ]; then
-        echo "[INFO] Decompressing project archive (TAR.GZ)..."
-        mkdir -p iot-project-backup-tmp
-        tar -xzf iot-project-backup.tar.gz -C iot-project-backup-tmp || error_exit "Failed to decompress TAR.GZ archive."
+    if [ -f "$ARCHIVE_NAME" ]; then
+        echo "[INFO] Decompressing project archive ($ARCHIVE_NAME)..."
+        unzip -q "$ARCHIVE_NAME" -d iot-project-backup-tmp || error_exit "Failed to decompress archive."
     else
-        error_exit "Project archive not found!"
+        error_exit "Project archive $ARCHIVE_NAME not found!"
     fi
 
     # Move dei contenuti
@@ -54,7 +56,6 @@ if [ ! -f ".setup_done" ]; then
     pip install --upgrade pip
     pip install pyspark numpy pandas matplotlib scikit-learn nltk || error_exit "Failed to install Python packages."
     cd ..
-    # Setup completo
     touch .setup_done
 else
     echo "[INFO] Setup already done. Skipping to execution..."
@@ -105,4 +106,3 @@ show_loading $script_pid
 
 echo "[INFO] Displaying output.txt..."
 cat output.txt
-
