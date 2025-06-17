@@ -17,7 +17,7 @@ This project implements a fast and scalable SMS spam detection system using PySp
 
 
 ```bash
-scp -r /Users/pyspark-sms-spam-detector/iot-project-backup.zip $linkCluster:/home/sshuser/
+scp -r /Users/pyspark-sms-spam-detector.zip $linkCluster:/home/sshuser/
 ```
 ### On the Cluster
 ```bash
